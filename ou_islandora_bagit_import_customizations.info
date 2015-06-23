@@ -1,0 +1,5 @@
+name = OU Import Customizations
+description = Customizations necessary for imports
+package = Islandora
+version = VERSION
+core = 7.x
