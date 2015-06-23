@@ -1,20 +1,54 @@
 <?php
 
 /**
- * Implements hook_init().
- */
-function ou_islandora_bagit_import_customizations_init() {
-  global $conf;
-  $conf['islandora_book_ingest_derivatives'] = array(
-    'image' => 'image',
-  );
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function ou_islandora_bagit_import_customizations_module_implements_alter(&$implementations, $hook) {
-  if ($hook == 'islandora_bookCModel_islandora_derivative') {
+  if (strpos($hook, 'islandora_derivative') !== FALSE) {
     unset($implementations['islandora_book']);
   }
+}
+
+/**
+ * Implements hook_CMODEL_islandora_derivative().
+ */
+function ou_islandora_bagit_import_customizations_islandora_bookcmodel_islandora_derivative() {
+  return array();
+}
+
+/**
+ * Implements hook_CMODEL_islandora_derivative().
+ */
+function ou_islandora_bagit_import_customizations_islandora_pagecmodel_islandora_derivative() {
+  $large_image_module_path = drupal_get_path('module', 'islandora_large_image');
+  $paged_content_module_path = drupal_get_path('module', 'islandora_paged_content');
+
+  $derivatives = array();
+
+  $derivatives[] = array(
+    'source_dsid' => 'OBJ',
+    'destination_dsid' => 'JP2',
+    'function' => array('islandora_large_image_create_jp2_derivative'),
+    'file' => "$large_image_module_path/includes/derivatives.inc",
+  );
+  $derivatives[] = array(
+    'source_dsid' => 'JP2',
+    'destination_dsid' => NULL,
+    'function' => array('islandora_paged_content_add_dimensions_relationships'),
+    'file' => "$paged_content_module_path/includes/utilities.inc",
+  );
+  $derivatives[] = array(
+    'source_dsid' => 'OBJ',
+    'destination_dsid' => 'TN',
+    'function' => array('islandora_large_image_create_tn_derivative'),
+    'file' => "$large_image_module_path/includes/derivatives.inc",
+  );
+  $derivatives[] = array(
+    'source_dsid' => 'OBJ',
+    'destination_dsid' => 'JPG',
+    'function' => array('islandora_large_image_create_jpg_derivative'),
+    'file' => "$large_image_module_path/includes/derivatives.inc",
+  );
+
+  return $derivatives;
 }
