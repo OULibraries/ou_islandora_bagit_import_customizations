@@ -1,11 +1,20 @@
 <?php
 
 /**
+ * Implements hook_init().
+ */
+function ou_islandora_bagit_import_customizations_init() {
+  global $conf;
+  $conf['islandora_book_ingest_derivatives'] = array(
+    'image' => 'image',
+  );
+}
+
+/**
  * Implements hook_module_implements_alter().
  */
 function ou_islandora_bagit_import_customizations_module_implements_alter(&$implementations, $hook) {
-  if (strpos($hook, 'islandora_derivative') !== FALSE) {
-    dpm($hook);
-    dpm($implementations, 'implementations');
+  if ($hook == 'islandora_bookCModel_islandora_derivative') {
+    unset($implementations['islandora_book']);
   }
 }
