@@ -5,6 +5,7 @@
  */
 function ou_islandora_bagit_import_customizations_module_implements_alter(&$implementations, $hook) {
   if (strpos($hook, 'islandora_derivative') !== FALSE) {
+    dpm($hook);
     dpm($implementations, 'implementations');
   }
 }
