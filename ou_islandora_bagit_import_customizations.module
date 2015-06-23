@@ -4,5 +4,7 @@
  * Implements hook_module_implements_alter().
  */
 function ou_islandora_bagit_import_customizations_module_implements_alter(&$implementations, $hook) {
-  dpm($hook);
+  if (strpos($hook, 'islandora') !== FALSE) {
+    dpm($hook);
+  }
 }
